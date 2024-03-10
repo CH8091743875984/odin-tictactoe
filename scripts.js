@@ -90,28 +90,47 @@ const gameController = (function(
     }
 
     const playRound = (x, y) => {
+        if (!checkEndgame() && (!checkDraw())) {
+            if (board.updateGrid(x, y, getActivePlayer().token)) {
+                if (checkDraw()) {
+                    console.log('game is a draw')
+                } else if (checkEndgame()) {
+                    console.log('we have a winner')
+                } else {
+                    switchActivePlayer()
+                }
+                return true
         
-        if (board.updateGrid(x, y, getActivePlayer().token)) {
-            
-            if (checkEndgame()) {
-                console.log('we have a winner')
             }
-
-            if (checkDraw()) {
-                console.log('game is a draw')
-            }
-    
-            switchActivePlayer()
-    
-            //render board
-            console.log(board.getGrid()[0])
-            console.log(board.getGrid()[1])
-            console.log(board.getGrid()[2])
         }
-
     }
     
-    return {playRound, getActivePlayer, board}
+    return {playRound, getActivePlayer}
 })
 
+const renderBoard = () => {
+    let boardDiv = document.getElementById('game');
+
+    const gridCoord = {1: [0,0], 2: [0,1], 3: [0,2],
+                       4: [1,0], 5: [1,1], 6: [1,2],
+                       7: [2,0], 8: [2,1], 9: [2,2]
+        }
+    
+    for (let i = 1; i <= 9; i++) {
+        const button = document.createElement('button');
+        button.classList.add('boardButton');
+        button.addEventListener('click', function(){
+            let currentToken = game.getActivePlayer().token;
+            if (game.playRound(gridCoord[i][0], gridCoord[i][1])) {
+                button.textContent = currentToken
+            }
+        });
+        //button.textContent = i;
+        boardDiv.appendChild(button);
+    }
+}
+
 const game = gameController();
+
+renderBoard();
+

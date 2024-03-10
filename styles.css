@@ -1,0 +1,12 @@
+#game > button {
+    height: 100px;
+    width: 100px;
+    border-radius: 0;
+    border: 1px solid black;
+}
+
+#game {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+
+}
