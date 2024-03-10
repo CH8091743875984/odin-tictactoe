@@ -11,12 +11,15 @@ const gameBoard = (function () {
         ['', '', '']];
 
     const updateGrid = (x,y,marker) => {
-        if (tokens.includes(marker)) {
-            console.log('Cannot place token: Invalid token')
+        if (!tokens.includes(marker)) {
+            console.log('Cannot place token'+marker+': Invalid token')
+            return false
         } else if (grid[x][y] !== '') {
-            console.log('Cannot place token: Token exists')
+            console.log('Cannot place token: Token exists / placement out of bounds')
+            return false
         } else {
             grid[x][y] = marker
+            return true
         }
     };
 
@@ -53,6 +56,8 @@ const gameController = (function(
         }
     }
 
+    const getActivePlayer = () => activePlayer;
+
     const checkThreeInRow = (arr, token) => {
         return arr.map(element => {
             return element === token ? element : null;
@@ -60,41 +65,53 @@ const gameController = (function(
         
     }
     
-    const getWinningPositions = () {
+    const getWinningPositions = () => {
         return arr = [
-            [board[0][0], board[0][1], board[0][2]],
-            [board[1][0], board[1][1], board[1][2]],
-            [board[2][0], board[2][1], board[2][2]],
-            [board[0][0], board[1][0], board[2][0]],
-            [board[0][1], board[1][1], board[2][1]],
-            [board[0][2], board[1][2], board[2][2]],
-            [board[0][0], board[1][1], board[2][2]],
-            [board[2][0], board[1][1], board[0][2]]
+            [board.getGrid()[0][0], board.getGrid()[0][1], board.getGrid()[0][2]],
+            [board.getGrid()[1][0], board.getGrid()[1][1], board.getGrid()[1][2]],
+            [board.getGrid()[2][0], board.getGrid()[2][1], board.getGrid()[2][2]],
+            [board.getGrid()[0][0], board.getGrid()[1][0], board.getGrid()[2][0]],
+            [board.getGrid()[0][1], board.getGrid()[1][1], board.getGrid()[2][1]],
+            [board.getGrid()[0][2], board.getGrid()[1][2], board.getGrid()[2][2]],
+            [board.getGrid()[0][0], board.getGrid()[1][1], board.getGrid()[2][2]],
+            [board.getGrid()[2][0], board.getGrid()[1][1], board.getGrid()[0][2]]
     ]
     }
 
     const checkEndgame = () => {
-        return (getWinningPositions.map(position => {
+        return (getWinningPositions().map(position => {
             return checkThreeInRow(position, activePlayer.token) 
         }
             )).filter(Boolean).length > 0
     }
 
-    const playRound = (activePlayer, x, y) {
-        board.updateGrid(x, y, activePlayer.token)
+    const checkDraw = () => {
+        return !board.getGrid().flat().includes("")
+    }
 
+    const playRound = (x, y) => {
+        
+        if (board.updateGrid(x, y, getActivePlayer().token)) {
+            
+            if (checkEndgame()) {
+                console.log('we have a winner')
+            }
 
-
-
-        switchActivePlayer()
-
-        if (checkEndgame()) {
-            console.log('we have a winner')
+            if (checkDraw()) {
+                console.log('game is a draw')
+            }
+    
+            switchActivePlayer()
+    
+            //render board
+            console.log(board.getGrid()[0])
+            console.log(board.getGrid()[1])
+            console.log(board.getGrid()[2])
         }
 
-        //render board
-
     }
- 
-
+    
+    return {playRound, getActivePlayer, board}
 })
+
+const game = gameController();
