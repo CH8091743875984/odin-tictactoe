@@ -35,6 +35,8 @@ const gameController = (function(
 ) {
     const board = gameBoard();
 
+    const getBoard = () => board.getGrid()
+
     const players = [
         {
             name: playerOneName,
@@ -105,7 +107,7 @@ const gameController = (function(
         }
     }
     
-    return {playRound, getActivePlayer}
+    return {playRound, getActivePlayer, getBoard}
 })
 
 const renderBoard = () => {
@@ -120,14 +122,15 @@ const renderBoard = () => {
         const button = document.createElement('button');
         button.classList.add('boardButton');
         button.addEventListener('click', function(){
-            let currentToken = game.getActivePlayer().token;
-            if (game.playRound(gridCoord[i][0], gridCoord[i][1])) {
-                button.textContent = currentToken
-            }
+            game.playRound(gridCoord[i][0], gridCoord[i][1])
+
+            const gridFlat = game.getBoard().flat()
+            button.textContent = gridFlat[i-1]
         });
         //button.textContent = i;
         boardDiv.appendChild(button);
     }
+ 
 }
 
 const game = gameController();
