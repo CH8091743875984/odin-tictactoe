@@ -94,7 +94,7 @@ const gameController = (function(
     const playRound = (x, y) => {
         if (!checkEndgame() && (!checkDraw())) {
             if (board.updateGrid(x, y, getActivePlayer().token)) {
-                if (checkDraw()) {
+                if (checkDraw() && !checkEndgame()) {
                     console.log('game is a draw')
                 } else if (checkEndgame()) {
                     console.log('we have a winner')
