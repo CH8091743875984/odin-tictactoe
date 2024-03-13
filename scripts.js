@@ -1,5 +1,4 @@
-//iife - gameboard, displaycontroller
-//players in objects
+//player name, start/restart, results display
 
 const gameBoard = (function () {
     
@@ -23,9 +22,15 @@ const gameBoard = (function () {
         }
     };
 
+    const resetGrid = () => {
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].length; j++) {
+                grid[i][j] = '';
+    }}}
+
     const getGrid = () => grid;
 
-    return {getGrid, updateGrid}
+    return {getGrid, updateGrid, resetGrid}
 
     })
 
@@ -56,6 +61,10 @@ const gameController = (function(
         } else {
             activePlayer = players[0]
         }
+    }
+
+    const resetActivePlayer = () => {
+        activePlayer = players[0]
     }
 
     const getActivePlayer = () => activePlayer;
@@ -106,8 +115,19 @@ const gameController = (function(
             }
         }
     }
+
+    const resetGame = () => {
+        board.resetGrid();
+        resetActivePlayer();
+        renderBoard();
+    }
     
-    return {playRound, getActivePlayer, getBoard}
+    document.getElementById('resetBtn').addEventListener('click', function() {
+        resetGame()
+    })
+    
+    
+    return {playRound, getActivePlayer, getBoard, resetGame}
 })
 
 const renderBoard = () => {
@@ -118,6 +138,11 @@ const renderBoard = () => {
                        7: [2,0], 8: [2,1], 9: [2,2]
         }
     
+    while (boardDiv.firstChild) {
+        boardDiv.removeChild(boardDiv.firstChild)
+    }
+
+
     for (let i = 1; i <= 9; i++) {
         const button = document.createElement('button');
         button.classList.add('boardButton');
