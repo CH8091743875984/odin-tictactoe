@@ -72,8 +72,7 @@ const gameController = (function(
     const checkThreeInRow = (arr, token) => {
         return arr.map(element => {
             return element === token ? element : null;
-        }).filter(Boolean).length === 3
-        
+        }).filter(Boolean).length === 3  
     }
     
     const getWinningPositions = () => {
@@ -90,6 +89,7 @@ const gameController = (function(
     }
 
     const checkEndgame = () => {
+        //Returns True if there is a winning position found for the active player
         return (getWinningPositions().map(position => {
             return checkThreeInRow(position, activePlayer.token) 
         }
@@ -97,29 +97,63 @@ const gameController = (function(
     }
 
     const checkDraw = () => {
+        //Returns True if there are no open spaces on the grid
         return !board.getGrid().flat().includes("")
     }
 
     const playRound = (x, y) => {
+
         if (!checkEndgame() && (!checkDraw())) {
             if (board.updateGrid(x, y, getActivePlayer().token)) {
                 if (checkDraw() && !checkEndgame()) {
-                    console.log('game is a draw')
+                    console.log('game is a draw');
+                    displayResults('none')
                 } else if (checkEndgame()) {
                     console.log('we have a winner')
+                    displayResults(getActivePlayer().name)
                 } else {
                     switchActivePlayer()
                 }
-                return true
-        
+
+                //return false
+
             }
         }
+
+
     }
 
     const resetGame = () => {
         board.resetGrid();
         resetActivePlayer();
         renderBoard();
+        resetResults();
+    }
+
+    function displayResults(winner) {
+        const resultDiv = document.getElementById("result")
+        const resultMsg = document.getElementById("resultMessage")
+        const resetBtn = document.getElementById("resetBtn")
+        
+        if (winner==='none') {
+            resultMsg.textContent = 'The game is a draw!'
+        } else {
+            resultMsg.textContent = winner+' wins the game!'
+        }
+        
+        resetBtn.textContent = 'Start new game?'
+        resultDiv.style.display = 'flex'
+    }
+
+    function resetResults() {
+        const resultDiv = document.getElementById("result")
+        const resultMsg = document.getElementById("resultMessage")
+        const resetBtn = document.getElementById("resetBtn")
+        
+        resultMsg.textContent = ''
+        resetBtn.textContent = 'Reset Game'
+        resultDiv.style.display = 'none'
+
     }
     
     document.getElementById('resetBtn').addEventListener('click', function() {
@@ -148,7 +182,6 @@ const renderBoard = () => {
         button.classList.add('boardButton');
         button.addEventListener('click', function(){
             game.playRound(gridCoord[i][0], gridCoord[i][1])
-
             const gridFlat = game.getBoard().flat()
             button.textContent = gridFlat[i-1]
         });

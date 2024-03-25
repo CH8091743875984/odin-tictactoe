@@ -11,3 +11,7 @@
     grid-template-columns: repeat(3, 100px);
 
 }
+
+#result {
+    display: none;
+}
