@@ -157,10 +157,11 @@ const gameController = (function(
         resetActivePlayer();
         renderBoard();
         resetResults();
+        renderPlayers();
     }
 
     function displayResults(winner) {
-        const resultDiv = document.getElementById("result")
+        // const resultDiv = document.getElementById("result")
         const resultMsg = document.getElementById("resultMessage")
         const resetBtn = document.getElementById("resetBtn")
         
@@ -171,17 +172,16 @@ const gameController = (function(
         }
         
         resetBtn.textContent = 'Start new game?'
-        resultDiv.style.display = 'flex'
+        resultMsg.style.display = 'flex'
     }
 
     function resetResults() {
-        const resultDiv = document.getElementById("result")
         const resultMsg = document.getElementById("resultMessage")
         const resetBtn = document.getElementById("resetBtn")
         
         resultMsg.textContent = ''
         resetBtn.textContent = 'Reset Game'
-        resultDiv.style.display = 'none'
+        resultMsg.style.display = 'none'
     }
     
     document.getElementById('resetBtn').addEventListener('click', function() {

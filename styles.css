@@ -12,6 +12,11 @@
 
 }
 
-#result {
+#playerDisplay, #result {
+    height: 30px;
+}
+
+#resultMessage {
     display: none;
 }
+
