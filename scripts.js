@@ -53,6 +53,37 @@ const gameController = (function(
         }
     ]
 
+    const setPlayerName = (player, newName) => {
+        players[player].name = newName;
+    }
+
+    const getPlayerName = (player) => {
+        return players[player].name
+    }
+
+    const playerBtn = document.getElementById('showPlayerDialog')
+    const playerDialog = document.getElementById('playerDialog')
+    const confirmPlayerBtn = document.getElementById('confirmPlayerBtn')
+    const cancelPlayerBtn = document.getElementById('closePlayerBtn')
+
+    playerBtn.addEventListener("click", () =>{
+        playerDialog.showModal();
+    })
+
+    confirmPlayerBtn.addEventListener("click", (event) =>{
+        event.preventDefault()
+        console.log(document.getElementById('player1').value)
+        game.setPlayerName(0, document.getElementById('player1').value) 
+        game.setPlayerName(1, document.getElementById('player2').value)
+        renderPlayers()
+        playerDialog.close();
+    })
+
+    cancelPlayerBtn.addEventListener("click", (event) =>{
+        event.preventDefault()
+        playerDialog.close();
+    })
+
     let activePlayer = players[0]
 
     const switchActivePlayer = () => {
@@ -119,8 +150,6 @@ const gameController = (function(
 
             }
         }
-
-
     }
 
     const resetGame = () => {
@@ -153,15 +182,13 @@ const gameController = (function(
         resultMsg.textContent = ''
         resetBtn.textContent = 'Reset Game'
         resultDiv.style.display = 'none'
-
     }
     
     document.getElementById('resetBtn').addEventListener('click', function() {
         resetGame()
     })
     
-    
-    return {playRound, getActivePlayer, getBoard, resetGame}
+    return {playRound, getActivePlayer, getBoard, resetGame, setPlayerName, getPlayerName}
 })
 
 const renderBoard = () => {
@@ -176,7 +203,6 @@ const renderBoard = () => {
         boardDiv.removeChild(boardDiv.firstChild)
     }
 
-
     for (let i = 1; i <= 9; i++) {
         const button = document.createElement('button');
         button.classList.add('boardButton');
@@ -188,7 +214,14 @@ const renderBoard = () => {
         //button.textContent = i;
         boardDiv.appendChild(button);
     }
- 
+
+    renderPlayers()
+    
+}
+
+const renderPlayers = () => {
+    document.getElementById('playerDisplay').textContent = 
+        game.getPlayerName(0) + ' as X vs. '+game.getPlayerName(1)+' as O'
 }
 
 const game = gameController();

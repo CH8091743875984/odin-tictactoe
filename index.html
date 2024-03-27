@@ -7,17 +7,28 @@
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer=""></script>
     <title>Play Tic Tac Toe</title>
-
 </head>
 <body>
     <div class="heading">Tic Tac Toe</div>
     <div class="players">
-        <form>
-            <label for="player1">Player 1 Name:</label><br>
-            <input type="text" id="player1" name="player1"><br>
-            <label for="player2">Player 2 Name:</label><br>
-            <input type="text" id="player2" name="player2">
-          </form> 
+        <div id="playerDisplay"></div>
+        <dialog id="playerDialog">
+            <form>
+                <label for="player1">Player 1 Name:</label><br>
+                <input type="text" id="player1" name="player1" required><br>
+                <label for="player2">Player 2 Name:</label><br>
+                <input type="text" id="player2" name="player2" required>
+                <div>
+                    <button type="submit" id="confirmPlayerBtn">Confirm</button>
+                    <!-- <input type="submit" id="novalidate-close" value="Cancel" formnovalidate /> -->
+                    <button type="submit" id="closePlayerBtn">Cancel</button>
+                  </div>
+            </form> 
+        </dialog>
+        <button id="showPlayerDialog">Set Player Names</button>
+
+        <div id="player1Info"></div>
+        <div id="player2Info"></div>
     </div>
     <button type="button" id="resetBtn">Reset Game</button>
     <div id="result">
